@@ -1,10 +1,9 @@
 fun main() {
-    var typeOfCard = "Мир"
-    val tax = calculateTax("Mastercard", 100000, 0, 0, 0, 0, 0, 0)
+    val tax = calculateTax("Мир", 100000, 0, 0, 0, 0, 0, 0)
     println(tax)
 }
 
-fun calculateTax(typeOfCard: String, pay: Int, dayPay1: Int, monthPay1: Int, dayPay2: Int, monthPay2: Int, dayPay3: Int, monthPay3: Int) = when(typeOfCard) {
+fun calculateTax(typeOfCard: String = "Мир", pay: Int = 100000, dayPay1: Int, monthPay1: Int = 0, dayPay2: Int, monthPay2: Int = 0, dayPay3: Int, monthPay3: Int = 0) = when(typeOfCard) {
     "Mastercard" -> calculateForMastercard(pay, dayPay1, monthPay1)
     "Visa" -> calculateForVisa(pay, dayPay2, monthPay2)
     "Мир" -> calculateForMir(pay, dayPay3, monthPay3)
@@ -13,8 +12,12 @@ fun calculateTax(typeOfCard: String, pay: Int, dayPay1: Int, monthPay1: Int, day
 
 fun calculateForMastercard(pay: Int, dayPay1: Int, monthPay1: Int): Int {
     if (dayPay1 + pay <= 150000 && monthPay1 + pay <= 600000) {
-        val total = if (pay + monthPay1 < 75000) 0 else ((pay - 75000) * 0.006 + 20)
-        return total.toInt()
+        if (pay + monthPay1 < 75000) {
+            return 0
+        } else {
+            val total = if (monthPay1 < 75000) ((monthPay1 + pay - 75000) * 0.006 + 20) else (pay* 0.006 + 20)
+            return total.toInt()
+        }
     } else {
         println("Операция не выполнена, лимит по карте превышен!")
     }
